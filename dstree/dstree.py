@@ -6,7 +6,7 @@ ELBOW = "┗╸"
 TEE   = "┣╸"
 PIPE_PREFIX = "┃ "
 SPACE_PREFIX = "  "
-unwantedDir = ['.git','.next','node_modules','public','styles','.expo','.expo-shared','assets']
+unwantedDir = ['.git','.next','node_modules','public','styles','.expo','.expo-shared','assets','__pycache__']
 
 class DirTree:
     def __init__(self,root_dir):
@@ -51,7 +51,6 @@ class _TreeGenerator():
             prefix += SPACE_PREFIX
         if not directory.name in unwantedDir:
             self._tree_body(directory=directory , prefix=prefix)  #overwrite default prefix
-            self._tree.append(prefix.rstrip())
     
     def _add_file(self,file,prefix,connector):
         self._tree.append(f"{prefix}{connector}📄{file.name}")
