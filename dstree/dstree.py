@@ -1,11 +1,12 @@
 import os
 import pathlib
 
-PIPE = "|"
-ELBOW = "└──"
-TEE   = "├──"
-PIPE_PREFIX = "|   "
-SPACE_PREFIX = "    "
+PIPE = "┃ "
+ELBOW = "┗╸"
+TEE   = "┣╸"
+PIPE_PREFIX = "┃ "
+SPACE_PREFIX = "  "
+unwantedDir = ['.git','.next','node_modules','public','styles','.expo','.expo-shared','assets']
 
 class DirTree:
     def __init__(self,root_dir):
@@ -28,8 +29,7 @@ class _TreeGenerator():
         return self._tree
     
     def _tree_head(self):
-        self._tree.append(f"{self._root_dir}{os.sep}")
-        self._tree.append(PIPE)
+        self._tree.append(f"📦{self._root_dir}")
 
     def _tree_body(self,directory,prefix = ""):
         entries = directory.iterdir()
@@ -44,15 +44,16 @@ class _TreeGenerator():
     
     
     def _add_directory(self,directory,index,entry_count,prefix,connector):
-        self._tree.append(f"{prefix}{connector}{directory.name}{os.sep}")
+        self._tree.append(f"{prefix}{connector}📂{directory.name}")
         if entry_count != index - 1:
             prefix += PIPE_PREFIX
         else:
             prefix += SPACE_PREFIX
-        self._tree_body(directory=directory , prefix=prefix)  #overwrite default prefix
-        self._tree.append(prefix.rstrip())
+        if not directory.name in unwantedDir:
+            self._tree_body(directory=directory , prefix=prefix)  #overwrite default prefix
+            self._tree.append(prefix.rstrip())
     
     def _add_file(self,file,prefix,connector):
-        self._tree.append(f"{prefix}{connector}{file.name}")
+        self._tree.append(f"{prefix}{connector}📄{file.name}")
                         
     
